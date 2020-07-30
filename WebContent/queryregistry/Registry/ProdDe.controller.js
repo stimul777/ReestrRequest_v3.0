@@ -358,7 +358,7 @@ sap.ui
 			function newRequestOpenDialog() {
 				var self = this;
 				var oCreateDialog = new sap.m.Dialog({
-					title: "Новый запрос (DE)"
+					title: "Новый запрос"
 				});
 
 				var oDropDownBox = new sap.m.ComboBox();
@@ -367,36 +367,43 @@ sap.ui
 				var oDropDownBoxTypeRequest = new sap.m.ComboBox({
 					change: function (oEvent) {
 						changeTypeRequest(oEvent,
+							NumberRequest, //номер запроса
 							oComboBoxReqFunction,
 							oMultiComboBoxRole,
-							oMultiComboBoxTransaction,
-							CheckBoxEcatt,
+							// oMultiComboBoxTransaction,
+							// CheckBoxEcatt,
 							oComboBoxEnvironment,
-							oMultiInputRequests,   // new для копии запросов
+							// oMultiInputRequests,   // new для копии запросов
 							descriptionCopyRequest,  //new описание для копии запросов
 							oDropDownBox, //задание
 						);
 					}
 				});
 
-				//new поле "описание" для копии запросов
+				// new поле "описание" для копии запросов
 				var descriptionCopyRequest = new sap.m.TextArea({
 					required: true,
 					cols: 60,
 					height: "125px",
 				});
-				//end
+			
+				// номер запросов
+				var NumberRequest = new sap.m.TextArea({
+					required: true,
+					cols: 20,
+					height: "50px",
+				});
 
 				var oComboBoxEnvironment = new sap.m.ComboBox({
 					visible: false,
 				});
 
-				// Фильтр по названию системы ландшафта yydevlyashov
-				var aFilterSysName = new sap.ui.model.Filter(
-					"Tarsystem",
-					sap.ui.model.FilterOperator.EQ,
-					"DET"
-				);
+				// // Фильтр по названию системы ландшафта yydevlyashov
+				// var aFilterSysName = new sap.ui.model.Filter(
+				// 	"Tarsystem",
+				// 	sap.ui.model.FilterOperator.EQ,
+				// 	"DET"
+				// );
 
 				// Список  "Запросы для копирования" пользователя для копирования yydevlyashov
 				var oMultiInputRequests = new sap.m.ComboBox({
@@ -421,9 +428,9 @@ sap.ui
 
 				var oComboBoxReqFunction = new sap.m.ComboBox();
 
-				var CheckBoxEcatt = new sap.m.CheckBox({
-					text: "Запрос для eCATT"
-				});
+				// var CheckBoxEcatt = new sap.m.CheckBox({
+				// 	text: "Запрос для eCATT"
+				// });
 
 				oDropDownBoxTypeRequest.setModel(oModel);
 				oDropDownBox.setModel(oModel);
@@ -463,48 +470,48 @@ sap.ui
 				var strRole = "";
 				var strTrans = "";
 
-				var oMultiComboBoxRole = new sap.m.MultiComboBox({
+				// var oMultiComboBoxRole = new sap.m.MultiComboBox({
 
-					items: {
-						path: "/RoleSet",
-						template: new sap.ui.core.ListItem({
-							key: "{RoleId}",
-							text: "{RoleId}",
-						}),
-					},
-					selectionFinish: function (oControlEvent) {
-						strRole = "";
-						var items = oMultiComboBoxRole.getSelectedItems();
-						for (var i = 0; i < items.length; i++) {
-							var item = items[i];
-							var context = item.getBindingContext();
-							arrayRole.push(context.getProperty("RoleId", context));
-							strRole += arrayRole[i] + " ";
-						}
-					},
-				});
+				// 	items: {
+				// 		path: "/RoleSet",
+				// 		template: new sap.ui.core.ListItem({
+				// 			key: "{RoleId}",
+				// 			text: "{RoleId}",
+				// 		}),
+				// 	},
+				// 	selectionFinish: function (oControlEvent) {
+				// 		strRole = "";
+				// 		var items = oMultiComboBoxRole.getSelectedItems();
+				// 		for (var i = 0; i < items.length; i++) {
+				// 			var item = items[i];
+				// 			var context = item.getBindingContext();
+				// 			arrayRole.push(context.getProperty("RoleId", context));
+				// 			strRole += arrayRole[i] + " ";
+				// 		}
+				// 	},
+				// });
 
-				var oMultiComboBoxTransaction = new sap.m.MultiComboBox(
-					{
-						items: {
-							path: "/TRANSACTIONSet",
-							template: new sap.ui.core.ListItem(
-								{
-									text: "{Tcode}",
-								})
-						},
-						selectionFinish: function (oControlEvent) {
-							strTrans = "";
-							var items = oMultiComboBoxTransaction.getSelectedItems();
-							for (var i = 0; i < items.length; i++) {
-								var item = items[i];
-								var context = item.getBindingContext();
-								arrayTrans.push(context.getProperty("Tcode", context));
-								strTrans += arrayTrans[i] + " ";
+				// var oMultiComboBoxTransaction = new sap.m.MultiComboBox(
+				// 	{
+				// 		items: {
+				// 			path: "/TRANSACTIONSet",
+				// 			template: new sap.ui.core.ListItem(
+				// 				{
+				// 					text: "{Tcode}",
+				// 				})
+				// 		},
+				// 		selectionFinish: function (oControlEvent) {
+				// 			strTrans = "";
+				// 			var items = oMultiComboBoxTransaction.getSelectedItems();
+				// 			for (var i = 0; i < items.length; i++) {
+				// 				var item = items[i];
+				// 				var context = item.getBindingContext();
+				// 				arrayTrans.push(context.getProperty("Tcode", context));
+				// 				strTrans += arrayTrans[i] + " ";
 
-							}
-						},
-					});
+				// 			}
+				// 		},
+				// 	});
 
 				oDropDownBox.setShowSecondaryValues(true);
 				oDropDownBoxTypeRequest.setShowSecondaryValues(true);
@@ -514,13 +521,18 @@ sap.ui
 				oDropDownBox.bindItems("/TASKSHDSet", itemTemplate);
 				oDropDownBoxTypeRequest.bindItems("/TRFUNCTIONSet", itemTemplateTypeRequest);
 
-				oMultiComboBoxTransaction.setModel(oModel);
+				// oMultiComboBoxTransaction.setModel(oModel);
 				oModel.setSizeLimit(1000);
 
 				var oSimpleForm = new sap.ui.layout.form.SimpleForm(
 					{
 						width: "400px",
 						content: [
+
+							new sap.m.Label({
+								text: "Номер запроса"
+							}),
+							NumberRequest.setRequired(true),
 
 							new sap.m.Label({
 								text: "Задание"
@@ -542,28 +554,28 @@ sap.ui
 							}),
 							oComboBoxReqFunction.setRequired(true),
 
-							new sap.m.Label({
-								text: "Роли"
-							}), oMultiComboBoxRole,
+							// new sap.m.Label({
+							// 	text: "Роли"
+							// }), oMultiComboBoxRole,
 
-							new sap.m.Label({
-								text: "Транзакции"
-							}), oMultiComboBoxTransaction,
+							// new sap.m.Label({
+							// 	text: "Транзакции"
+							// }), oMultiComboBoxTransaction,
 
-							new sap.m.Label({
-								text: ""
-							}), CheckBoxEcatt,
+							// new sap.m.Label({
+							// 	text: ""
+							// }), CheckBoxEcatt,
 
-							new sap.m.Label({
-								text: "Запросы для копирования"
-							}),
-							oMultiInputRequests,//setRequired(false),
+							// new sap.m.Label({
+							// 	text: "Запросы для копирования"
+							// }),
+							// oMultiInputRequests,//setRequired(false),
 						]
 					});
 
 				oCreateDialog.addContent(oSimpleForm);
 				oModel.attachRequestCompleted(function () {
-					busyDialog.close();
+					busyDialogNewRequest.close();
 				});
 
 				oCreateDialog.addButton(
@@ -572,89 +584,89 @@ sap.ui
 							text: "Сохранить",
 							//валидация формы создания:
 							press: function () {
-								var content = oSimpleForm.getContent();
-								for (var i in content) {
-									var control = content[i];
-									if (control.getValue) {
-										if (control.getValue() === "" && control.getRequired() == true) {
-											control.setValueState(sap.ui.core.ValueState.Error);
-											return;
-										}
-										else {
-											control.setValueState(sap.ui.core.ValueState.None);
-										}
-									}
-								}
-								//проверка на чекбокс eCATT 
-								var valEcatt = CheckBoxEcatt.getSelected();
-								if (valEcatt == true) {
-									valEcatt = "Ecatt"
-								} else {
-									valEcatt = ""
-								};
+								// var content = oSimpleForm.getContent();
+								// for (var i in content) {
+								// 	var control = content[i];
+								// 	if (control.getValue) {
+								// 		if (control.getValue() === "" && control.getRequired() == true) {
+								// 			control.setValueState(sap.ui.core.ValueState.Error);
+								// 			return;
+								// 		}
+								// 		else {
+								// 			control.setValueState(sap.ui.core.ValueState.None);
+								// 		}
+								// 	}
+								// }
+								// //проверка на чекбокс eCATT 
+								// var valEcatt = CheckBoxEcatt.getSelected();
+								// if (valEcatt == true) {
+								// 	valEcatt = "Ecatt"
+								// } else {
+								// 	valEcatt = ""
+								// };
 
 
-								var CreateBusyDialog = new sap.m.BusyDialog({
-									text: "Создание транспортного запроса..."
-								});
+								// var CreateBusyDialog = new sap.m.BusyDialog({
+								// 	text: "Создание транспортного запроса..."
+								// });
 
-								// Тип запроса
-								var trfunction = oDropDownBoxTypeRequest.getSelectedKey();
+								// // Тип запроса
+								// var trfunction = oDropDownBoxTypeRequest.getSelectedKey();
 
-								// Если создается "запрос на перенос" копии, то
-								if (trfunction === 'T') {
-									sap.ui.getCore().getModel().callFunction(
-										"/CreateQueryCopy",
-										{
-											method: "POST",
-											urlParameters: {
-												Original_trkorr: oMultiInputRequests.getSelectedKey(),
-												Tarsystem: "DET",
-											},
-											success: function (oData, response) {
-												CreateBusyDialog.close();
-												oCreateDialog.close();
-											},
-											error: function (oError) {
-												CreateBusyDialog.close();
-												oCreateDialog.close();
-												sap.m.MessageToast.show("Ошибка при создании запроса");
-											}
-										});
-								} else {
-									var oEntry = {}; // Параметры запроса
-									oEntry.TuskNumber = oDropDownBox.getSelectedKey();
-									oEntry.Trfunction = trfunction;
-									oEntry.Description = content[7].getValue() + " " + valEcatt + " " + oDropDownBoxTypeRequest.getSelectedKey() + " " + content[5].getValue();
-									oEntry.ReqFunction = content[7].getValue();
-									oEntry.Roles = strRole;
-									oEntry.Transact = strTrans;
-									oEntry.Ecatt = CheckBoxEcatt.getSelected();
+								// // Если создается "запрос на перенос" копии, то
+								// if (trfunction === 'T') {
+								// 	sap.ui.getCore().getModel().callFunction(
+								// 		"/CreateQueryCopy",
+								// 		{
+								// 			method: "POST",
+								// 			urlParameters: {
+								// 				Original_trkorr: oMultiInputRequests.getSelectedKey(),
+								// 				Tarsystem: "DET",
+								// 			},
+								// 			success: function (oData, response) {
+								// 				CreateBusyDialog.close();
+								// 				oCreateDialog.close();
+								// 			},
+								// 			error: function (oError) {
+								// 				CreateBusyDialog.close();
+								// 				oCreateDialog.close();
+								// 				sap.m.MessageToast.show("Ошибка при создании запроса");
+								// 			}
+								// 		});
+								// } else {
+								// 	var oEntry = {}; // Параметры запроса
+								// 	oEntry.TuskNumber = oDropDownBox.getSelectedKey();
+								// 	oEntry.Trfunction = trfunction;
+								// 	oEntry.Description = content[7].getValue() + " " + valEcatt + " " + oDropDownBoxTypeRequest.getSelectedKey() + " " + content[5].getValue();
+								// 	oEntry.ReqFunction = content[7].getValue();
+								// 	oEntry.Roles = strRole;
+								// 	oEntry.Transact = strTrans;
+								// 	oEntry.Ecatt = CheckBoxEcatt.getSelected();
 
-									sap.ui.getCore().getModel().create('/Query_registrySet', oEntry,
-										{
-											success: function (oData, response) {
-												var oModel = new sap.ui.model.odata.v2.ODataModel(link,
-													{
-														useBatch: false,
-														defaultUpdateMethod: "Put"
-													});
+								// 	sap.ui.getCore().getModel().create('/Query_registrySet', oEntry,
+								// 		{
+								// 			success: function (oData, response) {
+								// 				var oModel = new sap.ui.model.odata.v2.ODataModel(link,
+								// 					{
+								// 						useBatch: false,
+								// 						defaultUpdateMethod: "Put"
+								// 					});
 
-												oModel.setSizeLimit(500);
-												sap.ui.getCore().setModel(oModel);
-												oTable.setModel(oModel);
-												CreateBusyDialog.close();
-												oCreateDialog.close();
-												ConterText0();
-											},
-											error: function () {
-												oCreateDialog.close();
-												CreateBusyDialog.close();
-												sap.m.MessageToast.show("Ошибка при создании запроса");
-											}
-										});
-								}
-								CreateBusyDialog.open();
+								// 				oModel.setSizeLimit(500);
+								// 				sap.ui.getCore().setModel(oModel);
+								// 				oTable.setModel(oModel);
+								// 				CreateBusyDialog.close();
+								// 				oCreateDialog.close();
+								// 				ConterText0();
+								// 			},
+								// 			error: function () {
+								// 				oCreateDialog.close();
+								// 				CreateBusyDialog.close();
+								// 				sap.m.MessageToast.show("Ошибка при создании запроса");
+								// 			}
+								// 		});
+								// }
+								// CreateBusyDialog.open();
 							}
 						}));
 
