@@ -72,7 +72,6 @@ sap.ui
 			    tooltip : "История запроса",
 			    enabled : false,
 			    press : function() {
-				// var idx = oTable.getSelectedIndex();
 				var idx = oTable.getSelectedIndices();
 				if (idx == -1)
 				    return;
@@ -278,7 +277,6 @@ sap.ui
 											}
 										});
 									
-		   ////////////////////////////////////////////////////////////////
 		          // yyd      
 			      itemsBar[0].setText("К переносу в DE1 "+ "("+oJsonModelDE1.oData.results.length+")");
 			      itemsBar[1].setText("Перенос в DE1 одобрен "+ "("+oJsonModelDE11.oData.results.length+")");
@@ -297,6 +295,8 @@ sap.ui
 
 			//////////////////////////////////////////////////////////////КНОПКИ ИНИЦИАЛИЗАЦИЯ yyd
 			if (typeTable == 'other') {
+				// forceButton.setVisible(false);
+
 				if (check == "true") {
 			// кнопка запрет переноса
 					var notMigrationButton = new sap.m.Button({
@@ -320,6 +320,7 @@ sap.ui
 					var OtherSystemsButton = new sap.m.Button({
 					icon : "sap-icon://sys-enter-2",
 					tooltip : "Перенесено в другие системы ",
+					color: "#ADFF2F!important",
 					enabled : false,
 					press : function() {
 						// var idx = oTable.getSelectedIndex();
@@ -365,21 +366,6 @@ sap.ui
 
 				// yydevlyashov трансформация реестра запросов - добавление функционала переноса копий 
 				var oDropDownBoxTypeRequest = new sap.m.ComboBox();
-				console.log('КОМБОБОКС ', oDropDownBoxTypeRequest)
-					//change: function (oEvent) {
-						//changeTypeRequest(oEvent,
-							//NumberRequest, //номер запроса
-							//oComboBoxReqFunction,
-							//oMultiComboBoxRole,
-							// oMultiComboBoxTransaction,
-							// CheckBoxEcatt,
-							//oComboBoxEnvironment,
-							// oMultiInputRequests,   // new для копии запросов
-							//descriptionCopyRequest,  //new описание для копии запросов
-							//oDropDownBox, //задание
-						//);
-					//}
-				//});
 
 				// new поле "описание" для копии запросов
 				var descriptionCopyRequest = new sap.m.TextArea({
@@ -398,30 +384,6 @@ sap.ui
 				var oComboBoxEnvironment = new sap.m.ComboBox({
 					visible: false,
 				});
-
-				// Список  "Запросы для копирования" пользователя для копирования yydevlyashov
-				// var oMultiInputRequests = new sap.m.ComboBox({
-				// 	visible: false,
-				// 	items: {
-				// 		path: '/GetCopyableRequests',
-				// 		// filters: [aFilterSysName],
-				// 		template: new sap.ui.core.ListItem({
-				// 			key: "{Trkorr}",
-				// 			text: "{Trkorr} - {Description}",
-				// 		})
-				// 	},
-				
-					//yydevlyashov 24.10.19 Событие для поля "Копии запросов" )
-					// selectionChange: (oControlEvent) => {
-					// 	const item = oMultiInputRequests.getSelectedItem();
-					// 	var context = item.getBindingContext();
-					// 	const description = context.getProperty("Description", context);
-					// 	descriptionCopyRequest.setValue(description);
-					// },
-				// });
-				// oMultiInputRequests.setVisible(false);//копия запросов
-				// oMultiInputRequests.setRequired(false);//копия запросов
-				//	END	
 
 				var oComboBoxReqFunction = new sap.m.ComboBox();
 
@@ -472,7 +434,6 @@ sap.ui
 				oDropDownBox.bindItems("/TASKSHDSet", itemTemplate);
 				oDropDownBoxTypeRequest.bindItems("/TRFUNCTION_OTHERSet", itemTemplateTypeRequest);
 
-				// oMultiComboBoxTransaction.setModel(oModel);
 				oModel.setSizeLimit(1000);
 
 				var oSimpleForm = new sap.ui.layout.form.SimpleForm(
@@ -635,41 +596,6 @@ sap.ui
 				},
 			    });
 			    errorButton.addStyleClass("myErrorButton");
-			    // buttons.push(errorButton);
-
-			    // var notMigrationButton = new sap.m.Button({
-				// icon : "sap-icon://locked",
-				// enabled : false,
-				// tooltip : "Запрет переноса",
-				// press : function() {
-				//     // var idx = oTable.getSelectedIndex();
-				//     var idx = oTable.getSelectedIndices();
-				//     if (idx == -1)
-				// 	return;
-				//     var Trkorr = oTable.getContextByIndex(idx)
-				// 	    .getObject().Trkorr;
-				//     oDontPush(Trkorr);
-				// },
-			    // });
-			    // notMigrationButton.addStyleClass("myErrorButton");
-			    // buttons.push(notMigrationButton);
-
-			    // var passTest = new sap.m.Button({
-				// icon : "sap-icon://sys-enter-2",
-				// tooltip : "Отправлено на перенос",
-				// enabled : false,
-				// press : function() {
-				//     // var idx = oTable.getSelectedIndex();
-				//     var idx = oTable.getSelectedIndices();
-				//     if (idx == -1)
-				// 	return;
-				//     var Trkorr = oTable.getContextByIndex(idx)
-				// 	    .getObject().Trkorr;
-				//     openPushDialog(Trkorr);
-				// },
-			    // });
-			    // passTest.addStyleClass("myDoneButton");
-			    // buttons.push(passTest);
 
 			}
 
@@ -707,6 +633,9 @@ sap.ui
 			    forceButton.setVisible(true);
 			}
 			buttons.push(forceButton);
+
+			typeTable == 'other' ? forceButton.setVisible(false) : false;
+			
 
 			var searchBox = new sap.m.SearchField({
 			    enabled : true,
@@ -821,10 +750,7 @@ sap.ui
 						|| quantitySelectedRows == 0) {
 						watchButton.setEnabled(false);
 						historyButton.setEnabled(false);
-						// passTest.setEnabled(false);
 						errorButton.setEnabled(false);
-						// notMigrationButton.setEnabled(false);
-						// forceButton.setEnabled(false);
 					} else {
 						watchButton.setEnabled(true);
 						historyButton.setEnabled(true);
@@ -843,6 +769,7 @@ sap.ui
 						OtherSystemsButton.setEnabled(false);
 						notMigrationButton.setEnabled(false);
 						NewRequestButton.setEnabled(true);
+						forceButton.setEnabled(false);
 
 
 					} else {
@@ -851,6 +778,8 @@ sap.ui
 						OtherSystemsButton.setEnabled(true);
 						notMigrationButton.setEnabled(true);
 						NewRequestButton.setEnabled(true);
+						forceButton.setEnabled(false);
+
 					}
 					break;
 					////////////////////////////////////////
@@ -859,45 +788,27 @@ sap.ui
 			/////////////////////////////////////////yyd - Сортировка по иконкам(другие системы)
 			if (typeTable == 'other') {
 				var oControl = new sap.ui.commons.TextField()
-				.bindProperty("value", "Icon").setEditable(
-					false); 
-			    // new sap.ui.commons.Image ---- для
-			    // пользовательских изображений
+				.bindProperty("value", "Icon")
+				.setEditable(false); 
 			    var oControl = new sap.ui.core.Icon({
-				src : "{Icon}",
-				color : "#ff0000!important;",
+					src : "{Icon}",
+					color : "#ff0000!important;",
 				});
-				
+				console.log(oControl);
+
 			    oTable.addColumn(new sap.ui.table.Column({
-				label : new sap.ui.commons.Label({
-					text : "Статус"
+					label : new sap.ui.commons.Label({
+						text : "Статус"
 					}),
-				sortProperty : "Icon",
-				width : "80px",
-				template : oControl
+					sortProperty : "Icon",
+					width : "80px",
+					template : oControl
 			    }));
 			}
 
-			// var oControl = new sap.ui.commons.TextField()
-			// 	.bindProperty("value", "Trkorr").setEditable(
-			// 		false); // short binding notation
-			// oTable.addColumn(new sap.ui.table.Column({
-			//     label : new sap.ui.commons.Label({
-			// 	text : "Статус"
-			//     }),
-			    
-			//     width : "100px",
-			//     template : oControl
-			// }));
 			//////////////////////////////////////////////////////END
 
 			if (typeTable == 'into') {
-			    // new sap.ui.commons.Image ---- для
-			    // пользовательских изображений
-			    // var oControl = new sap.ui.core.Icon({
-				// src : "{Icon}",
-				// color : "#cc0303!important;",
-			    // });
 			    oTable.addColumn(new sap.ui.table.Column({
 				sortProperty : "Trkorr",
 				width : "80px",
@@ -1157,31 +1068,8 @@ sap.ui
 
 							}
 						    });
-				    // oModelApproveProd.update("/Query_registrySet('"
-				    // + oEntry.Trkorr + "')", oEntry );
+				};
 
-				}
-				;
-
-				// oModelApproveProd.submitChanges({
-				// error: function(){
-				// jQuery.sap.require("sap.m.MessageBox");
-				// sap.m.MessageBox.error("Произошла ошибка при
-				// смене статуса запроса!", {
-				// title: "Ошибка"});
-				// }
-				// });
-				//		
-				// oModelApproveProd.attachRequestCompleted(function(){
-				// var oModel = new
-				// sap.ui.model.odata.v2.ODataModel(link, {
-				// useBatch: false,
-				// defaultUpdateMethod: "Put"
-				// });
-				// oModel.setSizeLimit(500);
-				// sap.ui.getCore().setModel(oModel);
-				// oTable.setModel(oModel);
-				// });
 			    }
 
 			    else {
